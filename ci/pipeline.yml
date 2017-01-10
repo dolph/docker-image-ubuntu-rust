@@ -1,0 +1,47 @@
+---
+resources:
+- name: daily
+  type: time
+  source:
+    interval: 24h
+- name: image
+  type: docker-image
+  source:
+    repository: dolphm/ubuntu-latest-rust-nightly
+    username: {{docker_hub_username}}
+    password: {{docker_hub_password}}
+
+jobs:
+- name: build-image
+  plan:
+  - get: daily
+    trigger: true
+  - task: build-workspace
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: ubuntu
+          tag: "latest"
+      outputs:
+      - name: workspace
+      run:
+        path: /bin/bash
+        args:
+        - -c
+        - |
+          output_dir=workspace
+
+          cat << EOF > "${output_dir}/Dockerfile"
+          FROM ubuntu:latest
+          RUN apt-get update
+          RUN apt-get install -y curl gcc
+          RUN curl https://sh.rustup.rs -sSf > /tmp/rustup-init.sh
+          RUN chmod +x /tmp/rustup-init.sh
+          RUN sh /tmp/rustup-init.sh -y
+          RUN rm -rf /tmp/rustup-init.sh
+          EOF
+  - put: image
+    params:
+      build: workspace
