@@ -41,6 +41,7 @@ jobs:
           RUN chmod +x /tmp/rustup-init.sh
           RUN sh /tmp/rustup-init.sh -y
           RUN rm -rf /tmp/rustup-init.sh
+          ENV PATH "$PATH:~/.cargo/bin"
           EOF
   - put: image
     params:
