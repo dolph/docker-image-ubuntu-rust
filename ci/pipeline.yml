@@ -17,11 +17,14 @@ resources:
 
 jobs:
 - name: build-image
+  serial: true
+  build_logs_to_retain: 5
   plan:
   - get: repo
     trigger: true
   - get: daily
     trigger: true
   - put: image
+    attempts: 3
     params:
       build: repo/docker
