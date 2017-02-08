@@ -7,6 +7,7 @@ RUN curl https://sh.rustup.rs -sSf > /tmp/rustup-init.sh
 RUN chmod +x /tmp/rustup-init.sh
 RUN sh /tmp/rustup-init.sh -y
 RUN rm -rf /tmp/rustup-init.sh
+ENV PATH "$PATH:~/.cargo/bin"
 
 # Update the local crate index
 RUN cargo search
@@ -35,5 +36,3 @@ RUN cargo build
 
 # Clean up the dummy crate
 RUN rm -rf /tmp/dummy-crate
-
-ENV PATH "$PATH:~/.cargo/bin"
