@@ -1,6 +1,7 @@
 FROM ubuntu:latest
 
 USER root
+ENV USER root
 
 RUN apt-get update
 RUN apt-get install -y apt-utils
