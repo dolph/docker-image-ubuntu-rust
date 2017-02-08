@@ -22,6 +22,8 @@ WORKDIR /tmp/dummy-crate
 RUN ~/.cargo/bin/cargo init
 
 # Choose a selection of useful crates to download (and all their deps).
+RUN echo "argparse = '*'" >> Cargo.toml
+RUN echo "env_logger = '*'" >> Cargo.toml
 RUN echo "hyper = '*'" >> Cargo.toml
 RUN echo "itertools = '*'" >> Cargo.toml
 RUN echo "log = '*'" >> Cargo.toml
