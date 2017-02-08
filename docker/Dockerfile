@@ -10,13 +10,13 @@ RUN rm -rf /tmp/rustup-init.sh
 ENV PATH "$PATH:~/.cargo/bin"
 
 # Update the local crate index
-RUN cargo search
+RUN ~/.cargo/bin/cargo search
 
 # Initialize a dummy project so that we can pre-download the latest versions of
 # the most popular crates.
 RUN mkdir /tmp/dummy-crate
 WORKDIR /tmp/dummy-crate
-RUN cargo init
+RUN ~/.cargo/bin/cargo init
 
 # Choose a selection of useful crates to download (and all their deps).
 RUN echo "hyper = '*'" >> Cargo.toml
@@ -32,7 +32,7 @@ RUN echo "time = '*'" >> Cargo.toml
 RUN echo "url = '*'" >> Cargo.toml
 
 # Build the empty project, in order to download the crates.
-RUN cargo build
+RUN ~/.cargo/bin/cargo build
 
 # Clean up the dummy crate
 RUN rm -rf /tmp/dummy-crate
