@@ -15,6 +15,12 @@ ENV PATH "$PATH:~/.cargo/bin"
 # Update the local crate index
 RUN ~/.cargo/bin/cargo search
 
+# Install nightly rust.
+RUN rustup install nightly
+
+# Install clippy nightly.
+RUN rustup run nightly cargo install clippy
+
 # Initialize a dummy project so that we can pre-download the latest versions of
 # the most popular crates.
 RUN mkdir /tmp/dummy-crate
