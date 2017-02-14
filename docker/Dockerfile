@@ -16,10 +16,10 @@ ENV PATH "$PATH:~/.cargo/bin"
 RUN ~/.cargo/bin/cargo search
 
 # Install nightly rust.
-RUN rustup install nightly
+RUN ~/.cargo/bin/rustup install nightly
 
 # Install clippy nightly.
-RUN rustup run nightly cargo install clippy
+RUN ~/.cargo/bin/rustup run nightly cargo install clippy
 
 # Initialize a dummy project so that we can pre-download the latest versions of
 # the most popular crates.
