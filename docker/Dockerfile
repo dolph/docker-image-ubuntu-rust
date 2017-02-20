@@ -18,9 +18,6 @@ RUN ~/.cargo/bin/cargo search
 # Install nightly rust.
 RUN ~/.cargo/bin/rustup install nightly
 
-# Install clippy nightly.
-RUN ~/.cargo/bin/rustup run nightly cargo install clippy
-
 # Initialize a dummy project so that we can pre-download the latest versions of
 # the most popular crates.
 RUN mkdir /tmp/dummy-crate
