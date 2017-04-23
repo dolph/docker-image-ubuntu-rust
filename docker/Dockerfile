@@ -3,13 +3,18 @@ FROM ubuntu:latest
 USER root
 ENV USER root
 
-RUN apt-get update
-RUN apt-get install -y apt-utils
-RUN apt-get install -y curl gcc
-RUN curl https://sh.rustup.rs -sSf > /tmp/rustup-init.sh
-RUN chmod +x /tmp/rustup-init.sh
-RUN sh /tmp/rustup-init.sh -y
-RUN rm -rf /tmp/rustup-init.sh
+# Install package dependencies.
+RUN apt-get update \
+    && apt-get install -y \
+    apt-utils \
+    curl \
+    gcc
+
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf > /tmp/rustup-init.sh \
+    && chmod +x /tmp/rustup-init.sh
+    && sh /tmp/rustup-init.sh -y
+    &&  rm -rf /tmp/rustup-init.sh
 ENV PATH "$PATH:~/.cargo/bin"
 
 # Update the local crate index
@@ -19,28 +24,22 @@ RUN ~/.cargo/bin/cargo search
 RUN ~/.cargo/bin/rustup install nightly
 
 # Initialize a dummy project so that we can pre-download the latest versions of
-# the most popular crates.
+# the most popular crates, by building and destroy an empty project.
 RUN mkdir /tmp/dummy-crate
 WORKDIR /tmp/dummy-crate
-RUN ~/.cargo/bin/cargo init
-
-# Choose a selection of useful crates to download (and all their deps).
-RUN echo "argparse = '*'" >> Cargo.toml
-RUN echo "env_logger = '*'" >> Cargo.toml
-RUN echo "hyper = '*'" >> Cargo.toml
-RUN echo "itertools = '*'" >> Cargo.toml
-RUN echo "log = '*'" >> Cargo.toml
-RUN echo "matches = '*'" >> Cargo.toml
-RUN echo "num = '*'" >> Cargo.toml
-RUN echo "rand = '*'" >> Cargo.toml
-RUN echo "regex = '*'" >> Cargo.toml
-RUN echo "semver = '*'" >> Cargo.toml
-RUN echo "tempdir = '*'" >> Cargo.toml
-RUN echo "time = '*'" >> Cargo.toml
-RUN echo "url = '*'" >> Cargo.toml
-
-# Build the empty project, in order to download the crates.
-RUN ~/.cargo/bin/cargo build
-
-# Clean up the dummy crate
-RUN rm -rf /tmp/dummy-crate
+RUN ~/.cargo/bin/cargo init \
+    && echo "argparse = '*'" >> Cargo.toml \
+    && echo "env_logger = '*'" >> Cargo.toml \
+    && echo "hyper = '*'" >> Cargo.toml \
+    && echo "itertools = '*'" >> Cargo.toml \
+    && echo "log = '*'" >> Cargo.toml \
+    && echo "matches = '*'" >> Cargo.toml \
+    && echo "num = '*'" >> Cargo.toml \
+    && echo "rand = '*'" >> Cargo.toml \
+    && echo "regex = '*'" >> Cargo.toml \
+    && echo "semver = '*'" >> Cargo.toml \
+    && echo "tempdir = '*'" >> Cargo.toml \
+    && echo "time = '*'" >> Cargo.toml \
+    && echo "url = '*'" >> Cargo.toml \
+    && ~/.cargo/bin/cargo build \
+    && rm -rf /tmp/dummy-crate
