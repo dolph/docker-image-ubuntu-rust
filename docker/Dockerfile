@@ -13,8 +13,8 @@ RUN apt-get update \
 
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf > /tmp/rustup-init.sh \
-    && chmod +x /tmp/rustup-init.sh
-    && sh /tmp/rustup-init.sh -y
+    && chmod +x /tmp/rustup-init.sh \
+    && sh /tmp/rustup-init.sh -y \
     && rm -rf /tmp/rustup-init.sh
 ENV PATH "$PATH:~/.cargo/bin"
 
